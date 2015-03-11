@@ -27,10 +27,17 @@ end
 
 get '/key/get' do
 	#endpoint to get key
+	res = {}
 	key = server.get
-	return '404' if key == nil
+	if key == nil
+		res['status'] = false
+		res['message'] = '404' 
+	else
+		res['status'] = true
+		res['key'] = key
+	end
 	content_type :json
-	return key
+	return res.to_json
 end
 
 
@@ -42,7 +49,8 @@ get '/key/free' do
  		free['keys'], free['count'] = k, k.length
 		res = free.to_json
 	else
-		 res = "No key generated"
+		 res['message'] = "No key generated"
+		 res = res.to_json
 	end
 	content_type :json
 	return res
@@ -51,13 +59,15 @@ end
 
 get '/key/blocked' do
 	#endpoint to get list of blocked keys
+	res={}
 	k = server.blocked
 	if k.length>0
 		blocked={}
  		blocked['keys'], blocked['count'] = k, k.length
 		res = blocked.to_json
 	else
-		 res = "No key generated"
+		 res['message'] = "No key generated"
+		 res = res.to_json
 	end
 	content_type :json
 	return res
@@ -100,9 +110,17 @@ end
 
 get '/key/info/:id' do
 	#display key information
-	content_type :json
+	res = {}
 	info = server.key_info params[:id]
-	res = info ? info.to_json : "Key not found"
+	if info
+		res['status'] = true
+		res['key_info'] = info
+	else
+		res['status'] = false
+		res['message'] = "Key Not Found"
+	end
+	content_type :json
+	return res.to_json
 end
 
 error Sinatra::NotFound do

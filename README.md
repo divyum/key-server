@@ -29,14 +29,14 @@ Running tests
 
 API Endpoits
 ------------
-
+all outputs are in json
 * /   
 
 Just sends 'Connected' as output if the server is running
 
 * /keys  
 
-Generates keys, and outputs in form of a json array
+Generates keys
 
 * /key/get
 
